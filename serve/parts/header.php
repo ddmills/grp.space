@@ -1,8 +1,8 @@
 <?php session_start(); ?>
-<?php require_once 'serve/lib/mysqli-wrapper/mywrap.php'; ?>
-<?php require_once 'serve/lib/dj.php'; ?>
 <?php $_r = preg_replace(':/[^/]+:', '../', dirname($_SERVER['SCRIPT_NAME'])); ?>
 <?php $root = $_r == '/' || $_r == '\\' ? '' : $_r; ?>
+<?php require_once $root . 'serve/lib/mysqli-wrapper/mywrap.php'; ?>
+<?php require_once $root . 'serve/lib/dj.php'; ?>
 <!doctype html>
 <html lang='en'>
   <head>
