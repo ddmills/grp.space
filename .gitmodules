@@ -1,0 +1,6 @@
+[submodule "serve/lib/mysqli-wrapper"]
+	path = serve/lib/mysqli-wrapper
+	url = https://github.com/ddmills/mysqli-wrapper.git
+[submodule "serve/lib/lightweight-rest"]
+	path = serve/lib/lightweight-rest
+	url = https://github.com/ddmills/lightweight-rest.git
