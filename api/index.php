@@ -1,25 +1,19 @@
-<?php $_r = preg_replace(':/[^/]+:', '../', dirname($_SERVER['SCRIPT_NAME'])); ?>
-<?php $root = $_r == '/' || $_r == '\\' ? '' : $_r; ?>
 <?php
+session_start();
+require_once '../serve/lib/mysqli-wrapper/mywrap.php';
+require_once '../serve/lib/lightweight-rest/Rest_Api.php';
+require_once '../serve/lib/dj.php';
 
-include $root . 'parts/header.php';
+$api = new Rest_Api('resources/');
 
-$channel_name = ltrim($_GET['_url'], '/'); // the current channel
-$con          = new mywrap_con(); // a mysql wrapper object
-$channel      = DJ::get_channel($con, $channel_name); // the channel object
+$api->cors_enabled(false);
+$api->format_output(false);
+$api->pretty_print(true);
 
-if (!$channel) {
-  include $root . 'parts/channel/not-found.php';
-} else {
-  if ($channel['owner']) {
-    include $root . 'parts/channel/owner.php';
-  } else {
-    include $root . 'parts/channel/listener.php';
-  }
-}
+$api->map('channel/', 'ChannelResource.php');
+$api->map('channel/{str:channel_name}/', 'ChannelResource.php');
+$api->map('tracks/{num:track_id}/', 'TrackResource.php');
+$api->map('poll/{num:channel_id}/', 'PollResource.php');
 
-echo "\n<script> var CHANNEL_EXISTS = " . json_encode(!!$channel) . "; </script>\n";
-echo "\n<script> var CHANNEL_NAME = " . json_encode($channel_name) . "; </script>\n";
-echo "\n<script> var ROOT = " . json_encode($root) . "; </script>\n";
-include $root . 'parts/footer.php';
+$api->process();
 ?>

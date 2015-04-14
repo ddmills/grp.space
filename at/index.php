@@ -1,8 +1,7 @@
 <?php $_r = preg_replace(':/[^/]+:', '../', dirname($_SERVER['SCRIPT_NAME'])); ?>
 <?php $root = $_r == '/' || $_r == '\\' ? '' : $_r; ?>
+<?php include $root . 'serve/parts/header.php'; ?>
 <?php
-
-include $root . 'parts/header.php';
 
 $channel_name = ltrim($_GET['_url'], '/'); // the current channel
 $con          = new mywrap_con(); // a mysql wrapper object
