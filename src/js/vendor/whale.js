@@ -611,7 +611,7 @@
     },
 
     construct: function (s) {
-      if (s.constructor === Array) {
+      if (s instanceof NodeList || Array.isArray(s)) {
         this.elem = s;
       } else if (s && s.nodeType) {
         this.elem = [s];
@@ -622,6 +622,8 @@
         for (var i = div.childNodes.length-1; i >= 0; i--) {
           this.elem[i] = div.childNodes[i];
         }
+      } else {
+        this.elem = [];
       }
     },
 
@@ -647,6 +649,18 @@
 
     addClass: function (c) {
       return this.each (function (e) { e.className += ' ' + c; });
+    },
+
+    hide: function() {
+      return this.each(function(e) {
+        e.style.display = 'none';
+      });
+    },
+
+    show: function() {
+      return this.each(function(e) {
+        e.style.display = 'block';
+      });
     },
 
     each: function (cb) {
@@ -764,11 +778,11 @@
       this.Node = Node;
     },
 
-    find: function (s, complex) {
+    find: function (s) {
       // FIXME make similar to whale.Node.find
-      complex = complex || /\s/.test (s);
-      if (!complex && this._matches[s[0]]) return new this.Node (document[this._matches[s[0]]] (s.slice (1)));
-      return new this.Node (document.querySelectorAll (s));
+      // complex = complex || /\s/.test (s);
+      // if (!complex && this._matches[s[0]]) return new this.Node (document[this._matches[s[0]]] (s.slice (1)));
+      return new whale.Node (document.querySelectorAll (s));
     }
   });
 
