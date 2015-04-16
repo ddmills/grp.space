@@ -1,2 +1,3 @@
-var controls = whale.make('Controls');
-channel.doStuff();
+var streams = whale.get('grp.Streams');
+var strat = streams.getStrategy('youtube');
+console.log (strat);
