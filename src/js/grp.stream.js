@@ -20,7 +20,11 @@ whale.Service('grp.Streams', [], {
   },
 });
 
-whale.register('grp.Stream', whale.Dispatcher.extend({
+whale.Factory('grp.Stream', ['grp.Streams'], {
+  READY: false,
+  construct: function(Streams) {
+    Streams.registerStream(this);
+  },
   canHandle: function(type) {
     return false;
   },
@@ -63,4 +67,4 @@ whale.register('grp.Stream', whale.Dispatcher.extend({
   hide: function() {
     return false;
   }
-}));
+}, 'whale.Dispatcher');

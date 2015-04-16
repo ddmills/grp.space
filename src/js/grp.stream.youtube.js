@@ -1,10 +1,10 @@
-whale.Service('grp.Stream.youtube', ['grp.Streams'], {
+// # grp.Stream.youtube
+// This service is an adapter for the youtube api.
+// Like all adapters, this extends the grp.Stream object.
+whale.Service('grp.Stream.youtube', [], {
   DEFAULT_WIDTH: 640,
   DEFAULT_HEIGHT: 360,
-  construct: function(Streams) {
-    this.api = null;
-    Streams.registerStream(this);
-  },
+  api: null,
   canHandle: function(type) {
     return type == 'youtube';
   },
@@ -57,6 +57,7 @@ whale.Service('grp.Stream.youtube', ['grp.Streams'], {
       }
     });
     this.api.addEventListener('onStateChange', this._handleStateChange.bind(this));
+    this.READY = true;
     this.trigger('READY');
   },
   _handleStateChange: function(e) {
@@ -78,5 +79,7 @@ whale.Service('grp.Stream.youtube', ['grp.Streams'], {
       break;
     }
   }
-}, whale.get('grp.Stream'));
+}, 'grp.Stream');
+
+// this function will be called by the youtube api when it's ready
 function onYouTubeIframeAPIReady() { whale.get('grp.Stream.youtube')._doReady(); }

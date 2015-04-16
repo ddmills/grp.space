@@ -109,7 +109,7 @@
     return prefix ? prefix + id : id;
   }
 
-  var registered = {};
+  var registered = whale.registered = {};
 
   var get = whale.get = function (key) {
     if (!registered[key]) {
@@ -197,6 +197,7 @@
   // with the array of given dependencies. Service will create a single
   // instance of the new class and register that instance as given name
   var Service = whale.Service = function (name, deps, proto, chain) {
+    if (typeof chain == 'string') chain = whale.get(chain);
     chain = chain || Class;
     var obj = new (inject (deps, chain.extend (proto)));
     if (name != null) return register (name, obj);
@@ -296,6 +297,7 @@
     }
   }
   var Dispatcher = whale.Dispatcher = Class.extend (_dispatcherProto);
+  whale.register('whale.Dispatcher', whale.Dispatcher);
 
   // ## Listener
   var _listenerProto = {
@@ -349,9 +351,11 @@
     }
   }
   var Listener = whale.Listener = Class.extend (_listenerProto);
+  whale.register('whale.Listener', whale.Dispatcher);
 
   // ## Events
   var Events = whale.Events = whale.Dispatcher.extend (_listenerProto);
+  whale.register('whale.Events', whale.Events);
 
   // ## Model
   var Model = whale.Dispatcher.extend ({
