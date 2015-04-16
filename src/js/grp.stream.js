@@ -4,7 +4,7 @@ whale.Service('grp.Streams', [], {
     this.strategy = null;
   },
 
-  getStrategy: function(type) {
+  getStream: function(type) {
     for (var strat in this.strategies) {
       if (this.strategies[strat].canHandle(type)) {
         this.strategy = this.strategies[strat];
@@ -14,7 +14,7 @@ whale.Service('grp.Streams', [], {
     return false;
   },
 
-  registerStrategy: function(strategy) {
+  registerStream: function(strategy) {
     this.strategies.push(strategy);
     return this;
   },

@@ -1,8 +1,9 @@
-whale.Service('grp.Stream.youtube', [], {
+whale.Service('grp.Stream.youtube', ['grp.Streams'], {
   DEFAULT_WIDTH: 640,
   DEFAULT_HEIGHT: 360,
-  construct: function() {
+  construct: function(Streams) {
     this.api = null;
+    Streams.registerStream(this);
   },
   canHandle: function(type) {
     return type == 'youtube';
@@ -56,6 +57,7 @@ whale.Service('grp.Stream.youtube', [], {
       }
     });
     this.api.addEventListener('onStateChange', this._handleStateChange.bind(this));
+    this.trigger('READY');
   },
   _handleStateChange: function(e) {
     switch (e.data) {
@@ -77,6 +79,4 @@ whale.Service('grp.Stream.youtube', [], {
     }
   }
 }, whale.get('grp.Stream'));
-
-whale.get('grp.Streams').registerStrategy(whale.get('grp.Stream.youtube'));
 function onYouTubeIframeAPIReady() { whale.get('grp.Stream.youtube')._doReady(); }
