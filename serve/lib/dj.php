@@ -10,7 +10,7 @@ class DJ {
   public static function get_channel($con, $channel_id) {
     $results = $con->run('select * from channel where id = ? limit 1', 'i', $channel_id);
     $channel = $results->fetch_array();
-    if ($channel) $channel['owned'] = DJ::owns_channel($channel['id']);
+    if ($channel) $channel['owner'] = DJ::owns_channel($channel['id']);
     return $channel;
   }
 
@@ -23,7 +23,7 @@ class DJ {
   public static function get_channel_by_name($con, $channel_name) {
     $results = $con->run('select * from channel where name = ? limit 1', 's', $channel_name);
     $channel = $results->fetch_array();
-    if ($channel) $channel['owned'] = DJ::owns_channel($channel['id']);
+    if ($channel) $channel['owner'] = DJ::owns_channel($channel['id']);
     return $channel;
   }
 

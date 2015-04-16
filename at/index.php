@@ -8,11 +8,14 @@ $con          = new mywrap_con();
 $channel      = DJ::get_channel_by_name($con, $channel_name);
 
 if (!$channel) {
+  $page = 'not-found';
   include $root . 'serve/parts/channel/not-found.php';
 } else {
   if ($channel['owner']) {
+    $page = 'owner';
     include $root . 'serve/parts/channel/owner.php';
   } else {
+    $page = 'listener';
     include $root . 'serve/parts/channel/listener.php';
   }
 }

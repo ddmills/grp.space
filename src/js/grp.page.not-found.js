@@ -1,47 +1,28 @@
-var streams = whale.get('grp.Streams');
-var strat = streams.getStream('youtube');
-
-// # grp.Views.util.loader
-// util.loader is view for showing and hiding a little loading symbol
-// in a container.
-whale.View('grp.Views.util.loader', [], {
-  template: '<div class="loader"><i class="fa fa-2x fa-cog fa-spin"></i></div>',
-  construct: function() {
-    this.element = new whale.Node(this.template);
-    this.container = null;
-  },
-
-  render: function(selector) {
-    this.container = whale.Dom.find(selector);
-    this.container.html(this.element);
-    return this;
-  },
-
-  show: function() {
-    this.element.show();
-    return this;
-  },
-
-  hide: function() {
-    this.element.hide();
-    return this;
-  }
-});
-
-whale.View('grp.Views.page.not-found', ['grp.Views.util.loader'], {
-  construct: function(Loader) {
-    this.element = whale.Dom.find('#not-found-container');
+// # Channel-not-found page
+whale.View('grp.Views.page.not-found', ['grp.Views.common.loader', 'grp.api'], {
+  loadingTitle: '<i class="fa fa-fw fa-plus-circle"></i> Creating channel&hellip;',
+  redirectTitle: '<i class="fa fa-fw fa-refresh"></i> Channel created - redirecting',
+  construct: function(Loader, API) {
+    this.API = API;
     this.loader = new Loader;
-    this.loader.hide();
-    this.loader.render('.loader-container');
+    this.element = whale.Dom.find('#not-found-container');
     var btn = this.element.find('.btn-create-channel');
     btn.on('click', this.doCreate, this);
   },
 
+  setTitle: function(text) {
+    this.element.find('.channel-title').html(text);
+  },
+
   doCreate: function() {
+    this.loader.render('.loader-container');
+    this.setTitle(this.loadingTitle);
     this.element.find('.create-channel-container').hide();
-    this.loader.show();
+    this.API.createChannel(CHANNEL_NAME).done(function() {
+      this.loader.hide();
+      this.setTitle(this.redirectTitle);
+      location.reload();
+    }, this);
   }
 });
-
-var loader = whale.make('grp.Views.page.not-found');
+whale.make('grp.Views.page.not-found');
