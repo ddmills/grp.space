@@ -1,19 +1,11 @@
 <div id='owner-container'>
   <h4>
     <span class='channel-title'>
-      <i class='fa fa-fw fa-eye-slash'></i> Chasdfasdf
+      <i class='fa fa-fw fa-anchor'></i> grp.space/at/<?php echo htmlspecialchars($channel_name); ?>
     </span>
   </h4>
 
-  <div class='create-channel-container'>
-    <p>
-      The channel `<?php echo htmlspecialchars($channel_name); ?>` does not exist yet.
-      <input type='hidden' id='create-channel-name' value='<?php echo $channel_name; ?>'>
-      <br />
-      <br />
-      <button type='button' class='btn-pink btn-create-channel'>Create it +</button>
-    </p>
-  </div>
+  <?php include 'player.php'; ?>
 
   <div class='loader-container'></div>
 

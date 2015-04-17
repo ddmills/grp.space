@@ -1,4 +1,4 @@
-whale.Service('grp.Streams', [], {
+whale.Service('grp.streams', [], {
   construct: function() {
     this.strategies = [];
     this.strategy = null;
@@ -20,7 +20,7 @@ whale.Service('grp.Streams', [], {
   },
 });
 
-whale.Factory('grp.Stream', ['grp.Streams'], {
+whale.Factory('grp.stream', ['grp.streams'], {
   READY: false,
   construct: function(Streams) {
     Streams.registerStream(this);

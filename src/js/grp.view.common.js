@@ -1,7 +1,7 @@
 // # grp.Views.common.loader
 // util.loader is view for showing and hiding a little loading symbol
 // in a container.
-whale.View('grp.Views.common.loader', [], {
+whale.View('grp.view.common.loader', [], {
   template: '<div class="loader"><i class="fa fa-2x fa-cog fa-spin"></i></div>',
   construct: function() {
     this.element = new whale.Node(this.template);

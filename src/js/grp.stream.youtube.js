@@ -1,7 +1,7 @@
 // # grp.Stream.youtube
 // This service is an adapter for the youtube api.
 // Like all adapters, this extends the grp.Stream object.
-whale.Service('grp.Stream.youtube', [], {
+whale.Service('grp.stream.youtube', [], {
   DEFAULT_WIDTH: 640,
   DEFAULT_HEIGHT: 360,
   api: null,
@@ -79,7 +79,7 @@ whale.Service('grp.Stream.youtube', [], {
       break;
     }
   }
-}, 'grp.Stream');
+}, 'grp.stream');
 
 // this function will be called by the youtube api when it's ready
-function onYouTubeIframeAPIReady() { whale.get('grp.Stream.youtube')._doReady(); }
+function onYouTubeIframeAPIReady() { whale.get('grp.stream.youtube')._doReady(); }
