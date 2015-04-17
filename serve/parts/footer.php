@@ -12,6 +12,7 @@
       <script src='<?php echo $root; ?>src/js/vendor/whale.js'></script>
       <script src='<?php echo $root; ?>src/js/grp.api.js'></script>
       <script src='<?php echo $root; ?>src/js/grp.channel.js'></script>
+      <script src='<?php echo $root; ?>src/js/grp.channel.track.js'></script>
       <script src='<?php echo $root; ?>src/js/grp.view.common.js'></script>
 
       <?php if ($page == 'not-found') : ?>

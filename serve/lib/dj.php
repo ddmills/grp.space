@@ -75,7 +75,7 @@ class DJ {
    */
   public static function get_tracks($con, $channel_id) {
     $tracks = array();
-    $results = $con->run('select * from tracks where channel_id = ? order by number', 'i', $channel_id);
+    $results = $con->run('select * from track where channel = ? order by number', 'i', $channel_id);
     while ($result = $results->fetch_array()) {
       $tracks[$result['id']] = $result;
     }
@@ -196,7 +196,18 @@ class DJ {
    */
   public static function get_poll($con, $channel_id) {
     $results = $con->run('select * from poll where channel = ? limit 1', 'i', $channel_id);
-    return $results->fetch_array();
+    $poll = $results->fetch_array();
+    if (!$poll) {
+      $poll = array(
+        'channel' => $channel_id,
+        'track' => null,
+        'next' => null,
+        'status' => 'UNSET',
+        'time' => null,
+        'offset' => null
+      );
+    }
+    return $poll;
   }
 
   /**

@@ -1,13 +1,13 @@
 // # Channel-not-found page
-whale.View('grp.view.page.not-found', ['grp.view.common.loader', 'grp.channel'], {
+whale.View('grp.view.page.not-found', ['grp.channel', 'grp.view.common.loader'], {
 
   loadingTitle: '<i class="fa fa-fw fa-plus-circle"></i> Creating channel&hellip;',
 
   redirectTitle: '<i class="fa fa-fw fa-refresh"></i> Refreshing',
 
-  construct: function(Loader, Channel) {
-    this.loader = new Loader;
+  construct: function(Channel, Loader) {
     this.Channel = Channel;
+    this.loader = new Loader;
     this.element = whale.Dom.find('#not-found-container');
     var btn = this.element.find('.btn-create-channel');
     btn.on('click', this.doCreate, this);

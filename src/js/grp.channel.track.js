@@ -1,16 +1,15 @@
-whale.Factory('grp.channel.track', ['grp.channel'], {
-  construct: function(Channel, data) {
-    this.channel = Channel;
+whale.Factory('grp.channel.track', [], {
+  construct: function(data) {
     this.TRACK_ID = data.id;
+    this.CHAN_ID = data.channel;
     this.ACTIVE = data.active;
-    this.URL = data.url;
+    this.TRACK_URL = data.url;
     this.URL_TYPE = data.type;
     this.PLAYS = data.plays;
-    this.NUMBER = data.number;
+    this.TRACK_NO = data.number;
   },
 
   compareTo: function(other) {
-    return this.NUMBER > other.NUMBER;
+    return this.TRACK_NO > other.TRACK_NO;
   }
-
 });
