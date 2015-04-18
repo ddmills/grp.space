@@ -1,55 +1,81 @@
-whale.Factory('grp.view.page.owner.tracklist', ['grp.channel'], {
+whale.Factory('grp.view.page.owner.tracklist', ['grp.channel', 'grp.control'], {
   trackTemplate: whale.util.template('<li data-track="{{-trackId}}">{{-trackName}} <i class="fa fa-play"></i></li>'),
-  construct: function(Channel) {
+  construct: function(Channel, Control) {
     this.channel = Channel;
-    this.element = whale.Dom.find('.tracklist-container');
-    this.trackContainer = this.element.find('.tracklist');
+    this.control = Control;
 
-    this.element.find('.tracklist-add-btn').on('click', this.addTrack, this);
+    var cont = whale.Dom.find('.tracklist-container');
 
+    this.el = {
+      'inputs': {
+        'name': cont.find('.tracklist-add-name'),
+        'url': cont.find('.tracklist-add-url'),
+        'addbtn': cont.find('.tracklist-add-btn')
+      },
+      'list': cont.find('.tracklist'),
+      'container': cont
+    }
+
+    // bind to element events
+    this.el.inputs.addbtn.on('click', this.addTrack, this);
+    this.el.inputs.addbtn.on('click', this.addTrack, this);
+
+    // listen to channel events
     this.listen(this.channel, 'LOADED', this.onChannelLoad, this);
     this.listen(this.channel, 'TRACK_ADDED', this.onTrackAdded, this);
   },
 
   onChannelLoad: function() {
-    this.element.show();
+    this.el.container.show();
     this.renderTracks();
   },
 
   renderTrack: function(track) {
-    json = {
+    var ob, json = {
       'trackId': track.TRACK_ID,
       'trackName': track.NAME
     };
-    this.trackContainer.append(this.trackTemplate(json));
+
+    ob = new whale.Dom.Node(this.trackTemplate(json));
+    ob.on('click', function(e) {
+      this.setTrack(e.data('track'));
+    }, this);
+
+    this.el.list.append(ob);
     return this;
   },
 
   renderTracks: function() {
     for (var i in this.channel.tracks) {
-      this.renderTrack(this.channel.tracks[i]);
+      this.renderTrack(this.channel.getTrack(i));
     }
+    return this;
+  },
+
+  setTrack: function(id) {
+    this.control.playTrack(this.channel.getTrack(id));
     return this;
   },
 
   addTrack: function() {
     var name, url;
 
-    name = this.element.find('.tracklist-add-name').val();
-    url = this.element.find('.tracklist-add-url').val();
+    name = this.el.inputs.name.val();
+    url = this.el.inputs.url.val();
     num = this.channel.tracks.length + 1;
 
     if (name.length > 0 && url.length > 0) {
       this.channel.addTrack(name, url, num);
-      this.element.find('.tracklist-add-name').val(' ');
-      this.element.find('.tracklist-add-url').val(' ');
+      this.el.inputs.name.val('');
+      this.el.inputs.url.val('');
     }
+    return this;
   },
 
   onTrackAdded: function(c, track) {
     this.renderTrack(track);
+    return this;
   }
-
 
 }, 'whale.Events');
 

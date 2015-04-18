@@ -105,4 +105,8 @@ whale.Service('grp.channel', ['grp.api'], {
     return p;
   },
 
+  getTrack: function(id) {
+    return this.tracks[id];
+  }
+
 }, 'whale.Events');
