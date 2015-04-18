@@ -28,11 +28,17 @@ whale.Factory('grp.view.player', ['grp.control'], {
     this.el.controls.toggleMute.on('click', this.toggleMute, this);
     this.el.controls.volume.on('click', this.setVolume, this);
 
+    this.listenOnce(this.control, 'LOADED', this.onControlLoad, this);
     this.listen(this.control, 'TRACK_LOADING', this.onTrackLoading, this);
     this.listen(this.control, 'TRACK_CHANGE', this.onTrackChange, this);
 
     setInterval(this.updateMeter.bind(this), 1000);
 
+  },
+
+  onControlLoad: function() {
+    var v = this.control.getVolume();
+    this.el.controls.volumeProg.css('width', v * 100 + '%');
   },
 
   toggleVisual: function() {

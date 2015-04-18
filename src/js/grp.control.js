@@ -15,6 +15,7 @@ whale.Service('grp.control', ['grp.channel', 'grp.streams'], {
     };
     this.listenOnce(this.channel, 'LOADED', function() {
       this.state.owner = this.channel.OWNER;
+      this.trigger('LOADED');
     }, this);
   },
 
@@ -93,6 +94,10 @@ whale.Service('grp.control', ['grp.channel', 'grp.streams'], {
   setVolume: function(v) {
     this.state.volume = v;
     this.stream.setVolume(v);
+  },
+
+  getVolume: function() {
+    return this.state.volume;
   },
 
   getPollInfo: function() {

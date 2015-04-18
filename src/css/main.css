@@ -227,13 +227,9 @@ input, textarea, button {
   top : 0;
   left : 0;
   pointer-events : none;
-  width    : 75%;
+  width    : 0%;
   height   : 100%;
   background-color : #F07B7B;
   box-shadow: inset 0px 2px 4px #FF9999;
   border-right: 4px solid #fff;
 }
-
-/*.player-volume-meter::after {
-  content: '<span></span>';
-}*/
