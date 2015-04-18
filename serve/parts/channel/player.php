@@ -1,6 +1,14 @@
 <div class='player' style='display: none'>
   <div class='player-controls'>
-    <div class='player-current-trackname'>Darude Sandstorm</div>
+    <button type='button' class='player-controls-toggleVis'>Visual</button>
+    <button type='button' class='player-controls-toggleMute'>Mute</button>
+  </div>
+  <div class='player-info'>
+    <span class='player-info-title'></span>
+    <span class='player-info-time'>
+      <span class='player-info-current'></span>/
+      <span class='player-info-duration'></span>
+    </span>
   </div>
   <div class='player-meter'>
     <div class='player-meter-buffer'></div>

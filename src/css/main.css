@@ -140,13 +140,29 @@ body {
 }
 
 .tracklist > li:active {
-  background-color: #FFE6E6;
-  box-shadow: inset 0px 5px 15px rgb(248, 255, 188);
+  background-color : #FFE6E6;
+  box-shadow : inset 0px 5px 15px rgb(248, 255, 188);
 }
 
 input:focus,
 input:active {
   outline : none;
+}
+
+#youtube-player-container {
+  position : relative;
+  width    : 100%;
+  height   : auto;
+}
+#youtube-player {
+  display : block;
+}
+#youtube-player-cover {
+  position : absolute;
+  top      : 0;
+  left     : 0;
+  width    : 100%;
+  height   : 100%;
 }
 
 input, textarea, button {
@@ -171,4 +187,31 @@ input, textarea, button {
 }
 .loader {
   text-align: center;
+}
+
+/*
+ *   PLAYER
+ */
+.player {
+  margin-bottom : 21px;
+}
+.player-meter {
+  position: relative;
+  width: 100%;
+  background-color: #666;
+  height: 8px;
+}
+.player-meter-buffer {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  background-color : #777;
+}
+.player-meter-progress {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  background-color : #FF93ED;
 }

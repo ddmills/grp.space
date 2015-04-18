@@ -4,11 +4,10 @@ whale.Service('grp.streams', [], {
     this.strategy = null;
   },
 
-  getStream: function(type) {
+  getStream: function(state) {
     for (var strat in this.strategies) {
-      if (this.strategies[strat].canHandle(type)) {
-        this.strategy = this.strategies[strat];
-        return this.strategy;
+      if (this.strategies[strat].canHandle(state.track.URL_TYPE)) {
+        return this.setStream(this.strategies[strat], state);
       }
     }
     return false;
@@ -18,12 +17,27 @@ whale.Service('grp.streams', [], {
     this.strategies.push(strategy);
     return this;
   },
+
+  setStream: function(stream, state) {
+    if (this.strategy !== stream) {
+      if (this.strategy != null) this.strategy.teardown();
+      this.strategy = stream;
+      this.strategy.setup(state);
+    }
+    return this.strategy;
+  }
 });
 
 whale.Factory('grp.stream', ['grp.streams'], {
   READY: false,
   construct: function(Streams) {
     Streams.registerStream(this);
+  },
+  setup: function(state) {
+    return false;
+  },
+  teardown: function() {
+    return false;
   },
   canHandle: function(type) {
     return false;

@@ -22,6 +22,7 @@
         <!-- listener/owner scripts -->
         <script src='<?php echo $root; ?>src/js/grp.stream.js'></script>
         <script src='<?php echo $root; ?>src/js/grp.stream.youtube.js'></script>
+        <script src='https://www.youtube.com/iframe_api'></script>
         <script src='<?php echo $root; ?>src/js/grp.control.js'></script>
         <script src='<?php echo $root; ?>src/js/grp.view.player.js'></script>
 

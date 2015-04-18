@@ -53,7 +53,7 @@ whale.Factory('grp.view.page.owner.tracklist', ['grp.channel', 'grp.control'], {
   },
 
   setTrack: function(id) {
-    this.control.playTrack(this.channel.getTrack(id));
+    this.control.playTrack(this.channel.getTrack(id), 0);
     return this;
   },
 
@@ -89,6 +89,7 @@ whale.Factory('grp.view.page.owner', ['grp.channel', 'grp.view.common.loader'], 
 
     this.subViews = {};
     this.subViews.tracklist = whale.make('grp.view.page.owner.tracklist');
+    this.subViews.player = whale.make('grp.view.player');
 
     this.channel.load();
   },
