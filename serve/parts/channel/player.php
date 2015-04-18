@@ -2,6 +2,9 @@
   <div class='player-controls'>
     <button type='button' class='player-controls-toggleVis'>Visual</button>
     <button type='button' class='player-controls-toggleMute'>Mute</button>
+    <div class='player-volume'>
+      <div class='player-volume-meter'></div>
+    </div>
   </div>
   <div class='player-info'>
     <span class='player-info-title'></span>

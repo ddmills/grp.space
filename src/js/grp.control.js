@@ -90,6 +90,11 @@ whale.Service('grp.control', ['grp.channel', 'grp.streams'], {
     return this.getOffset()/dur;
   },
 
+  setVolume: function(v) {
+    this.state.volume = v;
+    this.stream.setVolume(v);
+  },
+
   getPollInfo: function() {
 
   }

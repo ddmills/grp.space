@@ -635,8 +635,8 @@
       var self = this;
       ctx = ctx || this;
       return this.each (function (n) {
-        n.addEventListener (e, function() {
-          cb.call (ctx, self);
+        n.addEventListener (e, function(ev) {
+          cb.call (ctx, ev, self);
         });
       });
     },
@@ -790,6 +790,24 @@
       return this.each (function (e) {
         e.style[key] = val;
       });
+    },
+
+    width: function () {
+      return this.elem[0].offsetWidth;
+    },
+
+    height: function () {
+      return this.elem[0].offsetHeight;
+    },
+
+    offset: function () {
+      var box, doc;
+      box = this.elem[0].getBoundingClientRect ();
+      doc = this.elem[0].ownerDocument.documentElement;
+      return {
+        top: box.top + window.pageYOffset - doc.clientTop,
+        left: box.left + window.pageXOffset - doc.clientLeft
+      };
     },
 
     data: function(key, val) {

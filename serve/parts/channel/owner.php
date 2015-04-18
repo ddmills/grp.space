@@ -13,7 +13,7 @@
       --><input type='text' class='tracklist-add-url' placeholder='url'><!--[newline]
       --><button type='button' class='tracklist-add-btn'>add +</button>
     </div>
-    <ul class='tracklist'>
+    <ul class='tracklist' style='display: none'>
     </ul>
   </div>
 

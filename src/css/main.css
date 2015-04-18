@@ -215,3 +215,25 @@ input, textarea, button {
   height: 100%;
   background-color : #FF93ED;
 }
+
+.player-volume {
+  position : relative;
+  height : 6px;
+  background-color : #666;
+  width : 20%;
+}
+.player-volume-meter {
+  position : absolute;
+  top : 0;
+  left : 0;
+  pointer-events : none;
+  width    : 75%;
+  height   : 100%;
+  background-color : #F07B7B;
+  box-shadow: inset 0px 2px 4px #FF9999;
+  border-right: 4px solid #fff;
+}
+
+/*.player-volume-meter::after {
+  content: '<span></span>';
+}*/

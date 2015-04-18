@@ -8,6 +8,8 @@ whale.Factory('grp.view.player', ['grp.control'], {
       'controls': {
         'toggleVisual': cont.find('.player-controls-toggleVis'),
         'toggleMute': cont.find('.player-controls-toggleMute'),
+        'volume': cont.find('.player-volume'),
+        'volumeProg': cont.find('.player-volume-meter')
       },
       'info': {
         'track': cont.find('.player-info-title'),
@@ -24,6 +26,7 @@ whale.Factory('grp.view.player', ['grp.control'], {
 
     this.el.controls.toggleVisual.on('click', this.toggleVisual, this);
     this.el.controls.toggleMute.on('click', this.toggleMute, this);
+    this.el.controls.volume.on('click', this.setVolume, this);
 
     this.listen(this.control, 'TRACK_LOADING', this.onTrackLoading, this);
     this.listen(this.control, 'TRACK_CHANGE', this.onTrackChange, this);
@@ -48,9 +51,15 @@ whale.Factory('grp.view.player', ['grp.control'], {
     }
   },
 
+  setVolume: function(e, el) {
+    var v = (e.pageX - el.offset().left) / el.width();
+    this.control.setVolume(v);
+    this.el.controls.volumeProg.css('width', v * 100 + '%');
+  },
+
   updateMeter: function() {
     if (this.control.state.status == 'UNSET') {
-      this.el.meter.progress.css('width', 0 + '%');
+      this.el.meter.progress.css('width', '0%');
     } else {
       var prog = (this.control.getProgress() * 100);
       this.el.meter.progress.css('width', prog + '%');

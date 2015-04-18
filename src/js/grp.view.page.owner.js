@@ -37,10 +37,11 @@ whale.Factory('grp.view.page.owner.tracklist', ['grp.channel', 'grp.control'], {
     };
 
     ob = new whale.Dom.Node(this.trackTemplate(json));
-    ob.on('click', function(e) {
-      this.setTrack(e.data('track'));
+    ob.on('click', function(e, el) {
+      this.setTrack(el.data('track'));
     }, this);
 
+    this.el.list.show();
     this.el.list.append(ob);
     return this;
   },
