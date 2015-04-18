@@ -1,4 +1,4 @@
-<div class='player'>
+<div class='player' style='display: none'>
   <div class='player-controls'>
     <div class='player-current-trackname'>Darude Sandstorm</div>
   </div>

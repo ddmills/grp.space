@@ -306,6 +306,7 @@
     },
     listen: function (dispatcher, evnt, action, ctx) {
       ctx = ctx || this;
+      if (typeof dispatcher._id == 'undefined') throw 'Given object to listen to is not a Dispatcher';
       var id = dispatcher._id;
       this._listening[id] = dispatcher;
       dispatcher.when (evnt, action, ctx);
@@ -699,7 +700,9 @@
           });
         });
       }
-      return e.insertAdjacentHTML ('beforeend', snippet);
+      return this.each (function (e) {
+        e.insertAdjacentHTML ('beforeend', snippet);
+      });
     },
 
     prepend: function (snippet) {
@@ -710,7 +713,9 @@
           });
         });
       }
-      return e.insertAdjacentHTML ('afterbegin', snippet);
+      return this.each (function (e) {
+        e.insertAdjacentHTML ('afterbegin', snippet);
+      });
     },
 
     before: function (snippet) {
@@ -754,12 +759,12 @@
 
     val: function (data) {
       // TODO check type of node
-      if (data) {
+      if (typeof data === 'undefined') {
+        return this.elem[0].value;
+      } else {
         this.each (function () {
           this.value = data;
         });
-      } else {
-        return this.elem[0].value;
       }
     }
   }));
@@ -933,5 +938,72 @@
     }
 
   });
+
+  whale.util = {};
+
+  var entityMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+    '/': '&#x2F;',
+    '`': '&#x60;'
+  };
+
+  var escapes = {
+    "'":      "'",
+    '\\':     '\\',
+    '\r':     'r',
+    '\n':     'n',
+    '\u2028': 'u2028',
+    '\u2029': 'u2029'
+  };
+  var tmpReg = /\{\{-(.+?)\}\}|\{\{=(.+?)\}\}|\{\{(.+?)\}\}|$/g;
+  var escReg = /\\|'|\r|\n|\u2028|\u2029/g;
+
+  var escChar = function(match) {
+    return '\\' + escapes[match];
+  }
+
+  whale.util.escape = function (text) {
+      return String(text).replace(/[&<>"'\/]/g, function (s) {
+        return entityMap[s];
+      });
+  },
+
+  whale.util.template = function (text) {
+    var index = 0;
+    var source = "__p+='";
+    text.replace (tmpReg, function(match, escape, interpolate, evaluate, offset) {
+      source += text.slice (index, offset).replace (escReg, escChar);
+      index = offset + match.length;
+
+      if (escape) {
+        source += "'+\n((__t=(" + escape + "))==null?'':whale.util.escape(__t))+\n'";
+      } else if (interpolate) {
+        source += "'+\n((__t=(" + interpolate + "))==null?'':__t)+\n'";
+      } else if (evaluate) {
+        source += "';\n" + evaluate + "\n__p+='";
+      }
+
+      return match;
+    });
+
+    source += "';\n";
+    source = 'with(obj||{}){\n' + source + '}\n';
+    source = "var __t,__p='',__j=Array.prototype.join," +
+      "print=function(){__p+=__j.call(arguments,'');};\n" +
+      source + 'return __p;\n';
+
+    var render = new Function('obj', 'whale', source);
+
+    var template = function (data) {
+      return render.call(this, data, whale);
+    };
+
+    template.source = 'function(obj){\n' + source + '}';
+    return template;
+  }
 
 }.call(this));

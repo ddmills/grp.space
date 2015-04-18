@@ -89,10 +89,11 @@ whale.Service('grp.channel', ['grp.api'], {
   },
 
   addTrack: function(name, url, number) {
-    if (!this.OWNED) return (new Promise()).reject('Only owners can add tracks');
-    if (!this.LOADED) return (new Promise()).reject('Channel must be loaded first');
+    // if (!this.OWNED) return (new Promise()).reject('Only owners can add tracks');
+    // if (!this.LOADED) return (new Promise()).reject('Channel must be loaded first');
 
-    return this.api.addTrack(this.CHAN_ID, name, url, number).done(function(data) {
+    var p = this.api.addTrack(this.CHAN_ID, name, url, number);
+    p.done(function(data) {
       if (data) {
         var track = whale.make('grp.channel.track', data);
         this.tracks[track.TRACK_ID] = track;
@@ -100,7 +101,8 @@ whale.Service('grp.channel', ['grp.api'], {
       } else {
         this.trigger('TRACK_ADDED_FAIL');
       }
-    });
+    }, this);
+    return p;
   },
 
 }, 'whale.Events');

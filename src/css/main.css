@@ -1,5 +1,8 @@
 * { box-sizing : border-box; }
 
+::selection { background: none repeat scroll 0% 0% #FFE1F4; }
+::-moz-selection { background: none repeat scroll 0% 0% #FFE1F4; }
+
 html {
   position    : relative;
   height      : 100vh;
@@ -69,6 +72,89 @@ body {
   background-image : linear-gradient(to bottom,#FFCFD1 0,#FF699D 100%)
 }
 
+.tracklist-add {
+  margin: 0 0 21px;
+}
+
+.tracklist-add > .tracklist-add-name {
+  width        : 20%;
+  border-right : none;
+  padding      : 4px 8px;
+}
+.tracklist-add > .tracklist-add-url {
+  width        : 60%;
+  padding      : 4px 8px;
+  border-right : none;
+}
+.tracklist-add > .tracklist-add-btn {
+  background-color: #F9C1F0;
+  width       : 20%;
+  padding     : 4px 8px;
+  box-shadow  : inset 0px 5px 15px #FCC9FF;
+  text-shadow : 1px 1px 1px #FCFBDA;
+  font-weight : 600;
+  cursor      : pointer;
+  color       : #5F1A88;
+}
+.tracklist-add > .tracklist-add-btn:focus {
+  outline : none;
+}
+.tracklist-add > .tracklist-add-btn:active {
+  outline    : none;
+  box-shadow : inset 0px 5px 15px #F884FF;
+}
+
+.tracklist {
+  margin  : 0 0 21px;
+  border  : 1px solid #ccc;
+  padding : 0 0 0 50px;
+  list-style-type : decimal-leading-zero;
+  overflow-y : auto;
+  /*max-height: 150px;*/
+  background-color: #efefef;
+}
+.tracklist > li {
+  border-bottom: 1px dashed #ccc;
+  border-left: 1px solid #ccc;
+  padding: 4px 8px;
+  cursor : pointer;
+  background-color: #FEFEFE;
+}
+.tracklist > li:last-child {
+  border-bottom: none;
+}
+.tracklist > li > .fa {
+  display   : none;
+  float     : right;
+  color     : #A1A1A1;
+  padding   : 2px 1px;
+  font-size : 10px;
+}
+
+.tracklist > li:hover {
+  background-color: #efefef;
+}
+
+.tracklist > li:hover > .fa {
+  display : inline;
+}
+
+.tracklist > li:active {
+  background-color: #FFE6E6;
+  box-shadow: inset 0px 5px 15px rgb(248, 255, 188);
+}
+
+input:focus,
+input:active {
+  outline : none;
+}
+
+input, textarea, button {
+  font-family : inherit;
+  color       : inherit;
+  padding     : 0px 4px;
+  border      : 1px solid #ccc;
+}
 
 /*
  *   UTILS

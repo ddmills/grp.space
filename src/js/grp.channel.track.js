@@ -1,6 +1,7 @@
 whale.Factory('grp.channel.track', [], {
   construct: function(data) {
     this.TRACK_ID = data.id;
+    this.NAME = data.name;
     this.CHAN_ID = data.channel;
     this.ACTIVE = data.active;
     this.TRACK_URL = data.url;
