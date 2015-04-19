@@ -1,4 +1,5 @@
 whale.Service('grp.control', ['grp.channel', 'grp.streams'], {
+  OFFSET_DOF: .5,
   construct: function(Channel, Streams, Player) {
     this.channel = Channel;
     this.streams = Streams;
@@ -19,13 +20,73 @@ whale.Service('grp.control', ['grp.channel', 'grp.streams'], {
     }, this);
   },
 
-  setTrack: function(track, offset) {
-    this.trigger('TRACK_LOADING');
-    this.state.track = track;
-    this.state.offset = offset;
-    this.stream = this.streams.getStream(this.state);
-    this.listenOnce(this.stream, 'LOADED', this.trackLoaded, this);
-    this.stream.load(track.TRACK_URL, offset);
+  setTrack: function(track, poll) {
+    if (this.state.track == null || track.TRACK_ID != this.state.track.TRACK_ID) {
+      this.trigger('TRACK_LOADING');
+      this.state.track = track;
+      this.state.offset = poll.offset;
+      this.stream = this.streams.getStream(this.state);
+      this.listenOnce(this.stream, 'LOADED', this.trackLoaded, this);
+      this.listenOnce(this.stream, 'LOADED', function() {
+        this.state.status = 'UNSET';
+        this.setTrack(track, poll);
+      }, this);
+      this.stream.load(track.TRACK_URL, this.calcOffset(poll.time, poll.offset));
+    } else {
+      if (poll.status == 'PLAYING' && this.state.status != 'PLAYING') this.play();
+      if (poll.status == 'PAUSED'&& this.state.status != 'PAUSED') this.pause();
+      if (poll.status == 'UNSET'&& this.state.status != 'UNSET') this.unset();
+      var offset = this.calcOffset(poll.time, poll.offset);
+      var dof = Math.abs(this.getOffset() - offset);
+      console.log(dof);
+      if (dof > this.OFFSET_DOF) {
+        this.setOffset(offset);
+      }
+    }
+
+  },
+
+  unset: function() {
+    console.log('unset stuff again');
+  },
+
+  applyPoll: function(poll) {
+
+    if (poll.trackId && this.state.track == null || this.state.track.TRACK_ID != poll.trackId) {
+      console.log('UNSET');
+
+      this.channel.fetchTrack(poll.trackId).done(function(data) {
+        var track = whale.make('grp.channel.track', data);
+        this.setTrack(track, poll);
+      }, this);
+
+    } else if (this.state.track.TRACK_ID == poll.trackId) {
+      this.setTrack(this.state.track, poll);
+    }
+  },
+
+  calcOffset: function(start, offset) {
+    var now = (new Date).getTime();
+    return ((now - start.getTime()) * 0.001) + offset;
+  },
+
+  sendPoll: function() {
+    console.log('HERE');
+    this.state.updated = new Date;
+    console.log('send poll');
+    var p = this.getPollData();
+    console.log(p);
+    this.channel.setPoll(p);
+  },
+
+  getPollData: function() {
+    return {
+      'track_id': this.state.track && this.state.track.TRACK_ID,
+      'next_id': null,
+      'status': this.state.status,
+      'time': whale.util.datetime(this.state.updated),
+      'offset': this.getOffset()
+    }
   },
 
   playTrack: function(track, offset) {
@@ -35,6 +96,7 @@ whale.Service('grp.control', ['grp.channel', 'grp.streams'], {
     this.stream = this.streams.getStream(this.state);
     this.listenOnce(this.stream, 'LOADED', this.play, this);
     this.listenOnce(this.stream, 'LOADED', this.trackLoaded, this);
+    this.listenOnce(this.stream, 'LOADED', this.sendPoll, this);
     this.stream.load(track.TRACK_URL, offset);
   },
 
@@ -98,9 +160,5 @@ whale.Service('grp.control', ['grp.channel', 'grp.streams'], {
 
   getVolume: function() {
     return this.state.volume;
-  },
-
-  getPollInfo: function() {
-
   }
 }, 'whale.Events');

@@ -80,9 +80,10 @@ whale.Factory('grp.view.page.owner.tracklist', ['grp.channel', 'grp.control'], {
 
 }, 'whale.Events');
 
-whale.Factory('grp.view.page.owner', ['grp.channel', 'grp.view.common.loader'], {
-  construct: function(Channel, Loader) {
+whale.Factory('grp.view.page.owner', ['grp.channel', 'grp.control', 'grp.view.common.loader'], {
+  construct: function(Channel, Control, Loader) {
     this.channel = Channel;
+    this.control = Control;
     this.loader = new Loader;
     this.loader.render('.loader-container');
 
@@ -97,8 +98,8 @@ whale.Factory('grp.view.page.owner', ['grp.channel', 'grp.view.common.loader'], 
 
   onChannelLoad: function() {
     this.loader.hide();
-  },
-
+    setInterval(this.control.sendPoll.bind(this.control), 10000);
+  }
 
 }, 'whale.Events');
 

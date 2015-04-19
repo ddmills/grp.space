@@ -20,7 +20,6 @@ whale.Service('grp.channel', ['grp.api'], {
   },
 
   load: function() {
-    if (!this.EXISTS) return (new Promise()).reject('Channel does not exist yet');
     return this.api.loadChannel(this.NAME).done(function(data) {
       if (data) {
         this.pollData = this._parsePoll(data.poll);
@@ -35,7 +34,6 @@ whale.Service('grp.channel', ['grp.api'], {
   },
 
   create: function() {
-    if (this.EXISTS) return (new Promise()).reject('Channel already exists');
     return this.api.createChannel(this.NAME).done(function() {
       this.EXISTS = true;
       this.trigger('CREATED');
@@ -44,8 +42,6 @@ whale.Service('grp.channel', ['grp.api'], {
   },
 
   poll: function() {
-    if (!this.EXISTS) return (new Promise()).reject('Channel does not exist yet');
-    if (!this.LOADED) return (new Promise()).reject('Channel must be loaded first');
     return this.api.poll(this.CHAN_ID).done(function(data) {
       if (data) {
         this.pollData = this._parsePoll(data);
@@ -54,19 +50,19 @@ whale.Service('grp.channel', ['grp.api'], {
     }, this);
   },
 
-  _parsePoll: function(pollData) {
-    return (pollData.status == 'UNSET') ? {
+  _parsePoll: function(data) {
+    return (data.status == 'UNSET') ? {
         'trackId': null,
         'nextId': null,
         'status': 'UNSET',
         'time': null,
         'offset': null
     } : {
-        'trackId': pollData.track_id,
-        'nextId': pollData.next,
-        'status': pollData.status,
-        'time': new Date(pollData.replace(/-/g,"/")),
-        'offset': parseInt(pollData.offset)
+        'trackId': data.track,
+        'nextId': data.next,
+        'status': data.status,
+        'time': new Date(data.time.replace(/-/g,"/")),
+        'offset': parseInt(data.offset)
     };
   },
 
@@ -79,19 +75,12 @@ whale.Service('grp.channel', ['grp.api'], {
   },
 
   setPoll: function(pollData) {
-    if (!this.EXISTS) return (new Promise()).reject('Channel does not exist yet');
-    if (!this.LOADED) return (new Promise()).reject('Channel must be loaded first');
-    if (!this.OWNED) return (new Promise()).reject('Only owners can set the poll');
-
     return this.api.setPoll(this.CHAN_ID, pollData).done(function() {
       this.trigger('POLL_SET');
     }, this);
   },
 
   addTrack: function(name, url, number) {
-    // if (!this.OWNED) return (new Promise()).reject('Only owners can add tracks');
-    // if (!this.LOADED) return (new Promise()).reject('Channel must be loaded first');
-
     var p = this.api.addTrack(this.CHAN_ID, name, url, number);
     p.done(function(data) {
       if (data) {
@@ -105,8 +94,12 @@ whale.Service('grp.channel', ['grp.api'], {
     return p;
   },
 
-  getTrack: function(id) {
-    return this.tracks[id];
+  getTrack: function(trackId) {
+    return this.tracks[trackId];
+  },
+
+  fetchTrack: function(trackId) {
+    return this.api.getTrack(this.CHAN_ID, trackId);
   }
 
 }, 'whale.Events');

@@ -1005,18 +1005,40 @@
     '\u2028': 'u2028',
     '\u2029': 'u2029'
   };
+
   var tmpReg = /\{\{-(.+?)\}\}|\{\{=(.+?)\}\}|\{\{(.+?)\}\}|$/g;
   var escReg = /\\|'|\r|\n|\u2028|\u2029/g;
 
   var escChar = function(match) {
     return '\\' + escapes[match];
-  }
+  };
 
   whale.util.escape = function (text) {
     return String(text).replace(/[&<>"'\/]/g, function (s) {
       return entityMap[s];
     });
-  },
+  };
+
+  whale.util.datetime = function(date) {
+    var y, M, d, h, m, s;
+    date = date || new Date;
+    y = date.getFullYear();
+    M = date.getMonth() + 1;
+    d = date.getDate();
+    h = date.getHours();
+    m = date.getMinutes();
+    s = date.getSeconds();
+
+    // pad the values
+    M = M < 10 ? '0' + M : M;
+    d = d < 10 ? '0' + d : d;
+    h = h < 10 ? '0' + h : h;
+    m = m < 10 ? '0' + m : m;
+    s = s < 10 ? '0' + s : s;
+
+    // (yyyy-MM-dd hh:mm:ss)
+    return (y + '-' + M + '-' + d + ' ' + h + ':' + m + ':' + s);
+  }
 
   whale.util.template = function (text) {
     var index = 0;

@@ -33,7 +33,6 @@
         <?php elseif ($page == 'listener') : ?>
           <!-- listener scripts -->
           <script src='<?php echo $root; ?>src/js/grp.view.page.listener.js'></script>
-
         <?php endif; ?>
       <?php endif; ?>
     <?php endif; ?>

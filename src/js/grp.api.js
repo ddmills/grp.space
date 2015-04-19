@@ -34,6 +34,13 @@ whale.Service('grp.api', ['whale.Ajax'], {
     });
   },
 
+  getTrack: function(channelId, trackId) {
+    return this.ajax.get({
+      'url': this.base + 'tracks/' + channelId + '/' + trackId,
+      'parse': this.parse
+    });
+  },
+
   addTrack: function(channelId, name, url, number) {
     return this.ajax.post({
       'url': this.base + 'tracks/' + channelId,
