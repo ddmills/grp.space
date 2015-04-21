@@ -1,2 +1,2 @@
 # grp.space
-http://grp.space.com
+http://grp.space
