@@ -14,6 +14,7 @@ whale.Service('grp.control', ['grp.channel', 'grp.streams'], {
       'track': null,
       'owner': false
     };
+
     this.listenOnce(this.channel, 'LOADED', function() {
       this.state.owner = this.channel.OWNER;
       this.trigger('LOADED');
@@ -38,12 +39,10 @@ whale.Service('grp.control', ['grp.channel', 'grp.streams'], {
       if (poll.status == 'UNSET'&& this.state.status != 'UNSET') this.unset();
       var offset = this.calcOffset(poll.time, poll.offset);
       var dof = Math.abs(this.getOffset() - offset);
-      console.log(dof);
       if (dof > this.OFFSET_DOF) {
         this.setOffset(offset);
       }
     }
-
   },
 
   unset: function() {
@@ -53,8 +52,6 @@ whale.Service('grp.control', ['grp.channel', 'grp.streams'], {
   applyPoll: function(poll) {
 
     if (poll.trackId && this.state.track == null || this.state.track.TRACK_ID != poll.trackId) {
-      console.log('UNSET');
-
       this.channel.fetchTrack(poll.trackId).done(function(data) {
         var track = whale.make('grp.channel.track', data);
         this.setTrack(track, poll);
@@ -71,12 +68,13 @@ whale.Service('grp.control', ['grp.channel', 'grp.streams'], {
   },
 
   sendPoll: function() {
-    console.log('HERE');
     this.state.updated = new Date;
-    console.log('send poll');
     var p = this.getPollData();
-    console.log(p);
     this.channel.setPoll(p);
+  },
+
+  setOffsetDOF: function(dof) {
+    this.OFFSET_DOF = dof;
   },
 
   getPollData: function() {
